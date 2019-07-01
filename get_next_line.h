@@ -6,13 +6,13 @@
 /*   By: magerber <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/20 13:47:05 by magerber          #+#    #+#             */
-/*   Updated: 2019/07/01 10:29:03 by magerber         ###   ########.fr       */
+/*   Updated: 2019/07/01 12:43:20 by magerber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef GET_NEXT_LINE_H
 # define GET_NEXT_LINE_H
-# define BUFF_SIZE 1
+# define BUFF_SIZE 10000
 
 # include "libft/libft.h"
 

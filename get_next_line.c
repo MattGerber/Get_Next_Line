@@ -6,13 +6,13 @@
 /*   By: magerber <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/06/18 16:33:39 by magerber          #+#    #+#             */
-/*   Updated: 2019/07/01 10:35:19 by magerber         ###   ########.fr       */
+/*   Updated: 2019/07/01 12:44:11 by magerber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int	ft_nline(char **str, char **line, int fd, int ret)
+static int	ft_nline(char **str, char **line, int fd)
 {
 	char	*temp;
 	int		length;
@@ -31,8 +31,6 @@ static int	ft_nline(char **str, char **line, int fd, int ret)
 	}
 	else if (str[fd][length] == '\0')
 	{
-		if (ret == BUFF_SIZE)
-			return (get_next_line(fd, line));
 		*line = ft_strdup(str[fd]);
 		ft_strdel(&str[fd]);
 	}
@@ -63,5 +61,5 @@ int			get_next_line(const int fd, char **line)
 		return (-1);
 	else if ((ret == 0 && str[fd] == NULL) || str[fd][0] == '\0')
 		return (0);
-	return (ft_nline(str, line, fd, ret));
+	return (ft_nline(str, line, fd));
 }
