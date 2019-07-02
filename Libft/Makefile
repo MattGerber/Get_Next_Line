@@ -6,7 +6,7 @@
 #    By: magerber <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2019/05/21 15:09:42 by magerber          #+#    #+#              #
-#    Updated: 2019/06/10 17:57:20 by magerber         ###   ########.fr        #
+#    Updated: 2019/07/02 15:10:10 by magerber         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -75,7 +75,8 @@ SOURCE = ft_atoi.c \
 		ft_lstmap.c \
 		ft_intsize.c \
 		ft_convert.c \
-		ft_isupper.c
+		ft_isupper.c \
+		ft_strndup.c
 
 OPTIONS = -c -I.
 

@@ -5,61 +5,87 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: magerber <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/06/18 16:33:39 by magerber          #+#    #+#             */
-/*   Updated: 2019/07/01 12:44:11 by magerber         ###   ########.fr       */
+/*   Created: 2019/07/02 13:33:14 by magerber          #+#    #+#             */
+/*   Updated: 2019/07/02 15:42:35 by magerber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static int	ft_nline(char **str, char **line, int fd)
+t_list	*ft_file(int fd, t_list **file)
 {
-	char	*temp;
-	int		length;
+	t_list *temp;
 
-	length = 0;
-	while (str[fd][length] != '\n' && str[fd][length] != '\0')
-		length++;
-	if (str[fd][length] == '\n')
+	if (!file)
+		return (NULL);
+	temp = *file;
+	while (temp)
 	{
-		*line = ft_strsub(str[fd], 0, length);
-		temp = ft_strdup(str[fd] + (length + 1));
-		free(str[fd]);
-		str[fd] = temp;
-		if (str[fd][0] == '\0')
-			ft_strdel(&str[fd]);
+		if ((int)temp->content_size == fd)
+			return (temp);
+		temp = temp->next;
 	}
-	else if (str[fd][length] == '\0')
-	{
-		*line = ft_strdup(str[fd]);
-		ft_strdel(&str[fd]);
-	}
-	return (1);
+	temp = ft_lstnew("", fd);
+	ft_lstadd(file, temp);
+	return (temp);
 }
 
-int			get_next_line(const int fd, char **line)
+int		ft_generate_line(char *content, char **line)
 {
-	static char	*str[255];
-	char		buff[BUFF_SIZE + 1];
-	char		*temp;
-	int			ret;
+	int		i;
+	char	*temp;
 
-	if (fd < 0 || line == NULL || read(fd, NULL, 0) < 0)
-		return (-1);
-	while ((ret = read(fd, buff, BUFF_SIZE)) > 0)
+	i = 0;
+	temp = *line;
+	while (content[i] && content[i] != '\n')
+		i++;
+	if (!(*line = ft_strndup(content, i)))
+		return (0);
+	return (i);
+}
+
+int		ft_reading(const int fd, char **content)
+{
+	char	buffer[BUFF_SIZE + 1];
+	char	*temp;
+	int		ret;
+
+	while ((ret = read(fd, buffer, BUFF_SIZE)) > 0)
 	{
-		buff[ret] = '\0';
-		if (str[fd] == NULL)
-			str[fd] = ft_strnew(1);
-		temp = ft_strjoin(str[fd], buff);
-		free(str[fd]);
-		str[fd] = temp;
-		if (ft_strchr(buff, '\n'))
+		buffer[ret] = '\0';
+		temp = *content;
+		if (!(*content = ft_strjoin(*content, buffer)))
+			return (-1);
+		free(temp);
+		if (ft_strchr(buffer, '\n'))
 			break ;
 	}
-	if (ret < 0)
+	return (ret);
+}
+
+int		get_next_line(const int fd, char **line)
+{
+	static t_list	*file;
+	t_list			*current;
+	char			buffer[BUFF_SIZE + 1];
+	char			*temp;
+	int				ret;
+
+	if ((fd < 0 || line == NULL || (read(fd, buffer, 0)) < 0
+				|| (!(current = ft_file(fd, &file))) || (BUFF_SIZE < 1)))
 		return (-1);
-	else if ((ret == 0 && str[fd] == NULL) || str[fd][0] == '\0')
+	temp = current->content;
+	ret = ft_reading(fd, &temp);
+	current->content = temp;
+	if (ret == 0 && *temp == '\0')
 		return (0);
-	return (ft_nline(str, line, fd));
+	ret = ft_generate_line(current->content, line);
+	if (temp[ret] != '\0')
+	{
+		current->content = ft_strdup(current->content + ret + 1);
+		free(temp);
+	}
+	else
+		ft_strclr(temp);
+	return (1);
 }

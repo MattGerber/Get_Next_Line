@@ -6,7 +6,7 @@
 /*   By: magerber <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/05/27 14:49:35 by magerber          #+#    #+#             */
-/*   Updated: 2019/06/10 17:15:21 by magerber         ###   ########.fr       */
+/*   Updated: 2019/07/02 14:45:50 by magerber         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,10 +19,6 @@ char	*ft_strnew(size_t size)
 	ptr = (char *)malloc(size + 1 * sizeof(char));
 	if (ptr == NULL)
 		return (NULL);
-	while (size + 1)
-	{
-		ptr[size] = 0;
-		size--;
-	}
+	ft_memset(ptr, '\0', size + 1);
 	return (ptr);
 }
